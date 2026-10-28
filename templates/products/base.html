@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}TechStore | Electronics{% endblock %}</title>
+<style>
+:root{--ink:#172033;--muted:#667085;--brand:#5546e8;--line:#e8eaf0;--bg:#f7f8fc}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px Arial,sans-serif}
+a{color:inherit;text-decoration:none}.top{background:#111827;color:white;padding:12px 5%;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+nav{background:white;padding:20px 5%;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 2px 12px #00000008}
+.logo{font-size:25px;font-weight:800;color:var(--brand)}.wrap{max-width:1200px;margin:auto;padding:28px 20px}
+.hero{background:linear-gradient(120deg,#171b36,#5546e8);color:white;padding:50px 36px;border-radius:22px;margin-bottom:30px}
+.hero h1{font-size:clamp(30px,5vw,48px);margin:0 0 12px}.hero p{color:#e4e5ff;max-width:600px;line-height:1.6}
+.btn{display:inline-block;border:0;background:var(--brand);color:white;padding:12px 18px;border-radius:10px;cursor:pointer;font-weight:bold}
+.hero .btn{background:white;color:#29245f}.filters{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 26px}
+.pill{background:white;border:1px solid var(--line);padding:10px 14px;border-radius:22px}.pill.active{background:var(--brand);color:white}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.card{background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 30px #18204412}
+.photo{height:210px;background:#f0f1f7;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:contain}.placeholder{font-size:55px}
+.info{padding:18px}.category{color:var(--muted);font-size:13px}.info h3{margin:10px 0}.price{font-size:22px;font-weight:800;margin:12px 0}.muted{color:var(--muted);line-height:1.6}
+.detail{display:grid;grid-template-columns:1fr 1fr;gap:32px;background:white;padding:28px;border-radius:18px}
+.detail .photo{height:380px;border-radius:12px}.detail h1{font-size:32px}
+footer{text-align:center;padding:30px;color:var(--muted)}
+@media(max-width:650px){.detail{grid-template-columns:1fr}.hero{padding:32px 22px}nav{padding:16px 5%}}
+</style>
+</head>
+<body>
+<div class="top"><span>TechStore — Your everyday electronics destination</span><span>Support • Quality • Value</span></div>
+<nav><a class="logo" href="/">TechStore<span style="color:#172033">.</span></a><div><a href="/">Shop</a> &nbsp; | &nbsp; <a href="/cart/">Cart ({{ request.session.cart|length|default:0 }})</a> &nbsp; | &nbsp; <a href="/admin/">Admin</a></div></nav>
+<main class="wrap">{% block content %}{% endblock %}</main>
+<footer>© TechStore · Electronics made simple</footer>
+</body></html>

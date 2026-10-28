@@ -1,0 +1,7 @@
+{% extends "products/base.html" %}
+{% block title %}{{ product.name }} | TechStore{% endblock %}
+{% block content %}
+<div class="detail"><div class="photo">{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<span class="placeholder">📦</span>{% endif %}</div>
+<div><div class="category">{{ product.category.name }}</div><h1>{{ product.name }}</h1><div class="price">₹{{ product.price }}</div><p class="muted">{{ product.description|linebreaksbr }}</p><p>Availability: {% if product.stock %}{{ product.stock }} in stock{% else %}Out of stock{% endif %}</p>
+{% if product.stock %}<form method="post" action="{% url 'add_to_cart' product.id %}">{% csrf_token %}<button class="btn">Add to cart</button></form>{% endif %}<p><a href="/">← Continue shopping</a></p></div></div>
+{% endblock %}

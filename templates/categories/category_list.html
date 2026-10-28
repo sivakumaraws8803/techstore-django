@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shop by Category | TechStore</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f7fb;
+            color: #222;
+        }
+        h1 { color: #172554; }
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000012;
+        }
+        a { color: #2563eb; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Shop by Category</h1>
+    <p>Explore the latest products at TechStore.</p>
+
+    <div class="categories">
+        {% for category in categories %}
+            <div class="card">
+                <h2>
+                    <a href="{% url 'categories:detail' category.slug %}">
+                        {{ category.name }}
+                    </a>
+                </h2>
+                <p>{{ category.description|default:"Explore our collection." }}</p>
+            </div>
+        {% empty %}
+            <p>No categories available. Add categories through Django Admin.</p>
+        {% endfor %}
+    </div>
+
+    <p><a href="/">← Back to Home</a></p>
+</body>
+</html>

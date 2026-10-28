@@ -1,0 +1,25 @@
+from django.shortcuts import get_object_or_404, render
+from products.models import Category
+
+
+def category_list(request):
+    categories = Category.objects.all()
+    return render(
+        request,
+        "categories/category_list.html",
+        {"categories": categories},
+    )
+
+
+def category_detail(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    products = category.products.filter(is_active=True)
+
+    return render(
+        request,
+        "categories/category_detail.html",
+        {
+            "category": category,
+            "products": products,
+        },
+    )
