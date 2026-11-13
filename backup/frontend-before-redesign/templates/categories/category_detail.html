@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ category.name }} | TechStore</title>
+</head>
+<body>
+    <h1>{{ category.name }}</h1>
+    <p>{{ category.description }}</p>
+
+    <h2>Products</h2>
+    {% for product in products %}
+        <div>
+            <h3>{{ product.name }}</h3>
+            <p>Price: ₹{{ product.price }}</p>
+            <p>{{ product.description }}</p>
+        </div>
+    {% empty %}
+        <p>No active products in this category yet.</p>
+    {% endfor %}
+
+    <a href="{% url 'categories:list' %}">← All Categories</a>
+</body>
+</html>

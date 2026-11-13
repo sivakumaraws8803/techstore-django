@@ -1,0 +1,18 @@
+{% extends "products/base.html" %}
+{% block title %}Customer Login | TechStore{% endblock %}
+{% block content %}
+<div style="max-width:500px;margin:30px auto;background:white;padding:30px;border-radius:16px">
+    <h1>Customer login</h1>
+    <p class="muted">Login to your TechStore account.</p>
+    {% if form.errors %}
+        <p style="color:#b42318">Invalid username or password. Please try again.</p>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button class="btn" type="submit">Login</button>
+    </form>
+    <p>New customer? <a href="{% url 'register' %}">Create account</a></p>
+</div>
+{% endblock %}

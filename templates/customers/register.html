@@ -1,0 +1,134 @@
+{% extends "products/base.html" %}
+{% block title %}Create Account | TechStore{% endblock %}
+
+{% block content %}
+<style>
+.register-page {
+    min-height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 45px 16px;
+    background: #f4f6fc;
+}
+.register-card {
+    width: 100%;
+    max-width: 480px;
+    background: #fff;
+    padding: 38px;
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(20,30,60,.08);
+}
+.register-card h1 {
+    color: #172033;
+    font-size: 30px;
+    margin: 0 0 8px;
+}
+.register-subtitle {
+    color: #667085;
+    margin-bottom: 28px;
+}
+.register-card label {
+    display: block;
+    font-weight: 600;
+    color: #344054;
+    margin: 17px 0 8px;
+}
+.register-card input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 14px;
+    border: 1px solid #d0d5dd;
+    border-radius: 9px;
+    font-size: 15px;
+    outline: none;
+}
+.register-card input:focus {
+    border-color: #6654e8;
+    box-shadow: 0 0 0 3px rgba(102,84,232,.12);
+}
+.register-card .helptext {
+    display: block;
+    color: #667085;
+    font-size: 12px;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+.register-card ul {
+    color: #667085;
+    font-size: 12px;
+    padding-left: 20px;
+    line-height: 1.7;
+}
+.register-card .errorlist {
+    color: #c62828;
+    font-size: 13px;
+}
+.register-button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 24px;
+    border: 0;
+    border-radius: 9px;
+    background: #5b49e8;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.register-button:hover {
+    background: #4937d0;
+}
+.register-footer {
+    text-align: center;
+    margin-top: 22px;
+    color: #667085;
+}
+.register-footer a {
+    color: #5b49e8;
+    font-weight: 600;
+    text-decoration: none;
+}
+@media(max-width: 480px) {
+    .register-card { padding: 25px 20px; }
+    .register-card h1 { font-size: 25px; }
+}
+</style>
+
+<div class="register-page">
+<div class="register-card">
+    <h1>Create your account</h1>
+    <p class="register-subtitle">Join TechStore and start shopping.</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+
+            {% if field.help_text %}
+                <div class="helptext">{{ field.help_text|safe }}</div>
+            {% endif %}
+
+            {% for error in field.errors %}
+                <div class="errorlist">{{ error }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        {% for error in form.non_field_errors %}
+            <p class="errorlist">{{ error }}</p>
+        {% endfor %}
+
+        <button class="register-button" type="submit">
+            Create Account
+        </button>
+    </form>
+
+    <div class="register-footer">
+        Already have an account?
+        <a href="{% url 'login' %}">Sign in</a>
+    </div>
+</div>
+</div>
+{% endblock %}

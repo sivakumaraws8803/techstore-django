@@ -1,0 +1,56 @@
+{% extends "products/base.html" %}
+{% block title %}TechStore | Shop Electronics{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Upgrade your everyday.</h1>
+    <p>Discover smartphones, electronics and everyday technology at TechStore.</p>
+    <a class="btn" href="#products">Explore products</a>
+</section>
+
+<h2>Shop by category</h2>
+<div class="filters">
+    <a class="pill {% if not selected_category %}active{% endif %}" href="/">All products</a>
+    {% for category in categories %}
+        <a class="pill {% if selected_category == category %}active{% endif %}"
+           href="/?category={{ category|urlencode }}">{{ category }}</a>
+    {% endfor %}
+</div>
+
+<h2 id="products">Our products</h2>
+<div class="grid">
+    {% for product in products %}
+    <article class="card">
+        <a href="{% url 'product_detail' product.id %}">
+            <div class="photo">
+                {% if product.image_url %}
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                {% else %}
+                    <span class="placeholder">📦</span>
+                {% endif %}
+            </div>
+        </a>
+        <div class="info">
+            <div class="category">{{ product.category }}</div>
+            <h3><a href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
+            <div class="price">₹{{ product.price }}</div>
+            <p class="muted">
+                {% if product.stock > 0 %}
+                    In stock: {{ product.stock }}
+                {% else %}
+                    Currently unavailable
+                {% endif %}
+            </p>
+            {% if product.stock > 0 %}
+            <form method="post" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+                <button class="btn" type="submit">Add to cart</button>
+            </form>
+            {% endif %}
+        </div>
+    </article>
+    {% empty %}
+        <p>No products are available right now.</p>
+    {% endfor %}
+</div>
+{% endblock %}

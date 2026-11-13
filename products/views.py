@@ -1,51 +1,112 @@
-from django.shortcuts import get_object_or_404, render, redirect
+from decimal import Decimal, InvalidOperation
+
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
-from .models import Category, Product
+
+from .models import SharedProduct
 
 
 def home(request):
-    categories = Category.objects.all()
-    products = Product.objects.filter(is_active=True).select_related("category")
-    selected = request.GET.get("category")
-    if selected:
-        products = products.filter(category__slug=selected)
+    selected_category = request.GET.get("category", "").strip()
+
+    products = SharedProduct.objects.using("shared_products").filter(
+        is_active=True
+    )
+
+    if selected_category:
+        products = products.filter(category=selected_category)
+
+    categories = (
+        SharedProduct.objects.using("shared_products")
+        .filter(is_active=True)
+        .exclude(category__isnull=True)
+        .exclude(category="")
+        .values_list("category", flat=True)
+        .distinct()
+        .order_by("category")
+    )
+
     return render(request, "products/home.html", {
-        "categories": categories,
         "products": products,
-        "selected_category": selected,
+        "categories": categories,
+        "selected_category": selected_category,
     })
 
 
-def product_detail(request, slug):
-    product = get_object_or_404(Product, slug=slug, is_active=True)
+def product_detail(request, product_id):
+    product = get_object_or_404(
+        SharedProduct.objects.using("shared_products"),
+        pk=product_id,
+        is_active=True,
+    )
     return render(request, "products/detail.html", {"product": product})
 
 
 @require_POST
 def add_to_cart(request, product_id):
-    product = get_object_or_404(Product, pk=product_id, is_active=True)
+    product = get_object_or_404(
+        SharedProduct.objects.using("shared_products"),
+        pk=product_id,
+        is_active=True,
+    )
+
     cart = request.session.get("cart", {})
     key = str(product.id)
-    quantity = int(cart.get(key, 0))
+
+    try:
+        quantity = int(cart.get(key, 0))
+    except (TypeError, ValueError):
+        quantity = 0
+
+    if quantity < 0:
+        quantity = 0
+
     if product.stock > quantity:
         cart[key] = quantity + 1
         request.session["cart"] = cart
+
     return redirect("cart")
 
 
 def cart_view(request):
     cart = request.session.get("cart", {})
     items = []
-    total = 0
+    total = Decimal("0.00")
+    valid_cart = {}
+
     for product_id, quantity in cart.items():
         try:
-            product = Product.objects.get(pk=int(product_id), is_active=True)
-        except (Product.DoesNotExist, ValueError):
+            product_id = int(product_id)
+            quantity = int(quantity)
+            if quantity <= 0:
+                continue
+
+            product = SharedProduct.objects.using(
+                "shared_products"
+            ).get(pk=product_id, is_active=True)
+
+            quantity = min(quantity, product.stock)
+            if quantity <= 0:
+                continue
+
+            line_total = product.price * quantity
+            items.append({
+                "product": product,
+                "quantity": quantity,
+                "line_total": line_total,
+            })
+            total += line_total
+            valid_cart[str(product.id)] = quantity
+
+        except (SharedProduct.DoesNotExist, TypeError, ValueError, InvalidOperation):
             continue
-        line_total = product.price * quantity
-        items.append({"product": product, "quantity": quantity, "line_total": line_total})
-        total += line_total
-    return render(request, "products/cart.html", {"items": items, "total": total})
+
+    request.session["cart"] = valid_cart
+
+    return render(request, "products/cart.html", {
+        "items": items,
+        "total": total,
+    })
 
 
 @require_POST

@@ -1,35 +1,456 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{% block title %}TechStore | Electronics{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>{% block title %}TechStore | Premium Electronics{% endblock %}</title>
+
 <style>
-:root{--ink:#172033;--muted:#667085;--brand:#5546e8;--line:#e8eaf0;--bg:#f7f8fc}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px Arial,sans-serif}
-a{color:inherit;text-decoration:none}.top{background:#111827;color:white;padding:12px 5%;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-nav{background:white;padding:20px 5%;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 2px 12px #00000008}
-.logo{font-size:25px;font-weight:800;color:var(--brand)}.wrap{max-width:1200px;margin:auto;padding:28px 20px}
-.hero{background:linear-gradient(120deg,#171b36,#5546e8);color:white;padding:50px 36px;border-radius:22px;margin-bottom:30px}
-.hero h1{font-size:clamp(30px,5vw,48px);margin:0 0 12px}.hero p{color:#e4e5ff;max-width:600px;line-height:1.6}
-.btn{display:inline-block;border:0;background:var(--brand);color:white;padding:12px 18px;border-radius:10px;cursor:pointer;font-weight:bold}
-.hero .btn{background:white;color:#29245f}.filters{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 26px}
-.pill{background:white;border:1px solid var(--line);padding:10px 14px;border-radius:22px}.pill.active{background:var(--brand);color:white}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
-.card{background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.2s}
-.card:hover{transform:translateY(-3px);box-shadow:0 12px 30px #18204412}
-.photo{height:210px;background:#f0f1f7;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.photo img{width:100%;height:100%;object-fit:contain}.placeholder{font-size:55px}
-.info{padding:18px}.category{color:var(--muted);font-size:13px}.info h3{margin:10px 0}.price{font-size:22px;font-weight:800;margin:12px 0}.muted{color:var(--muted);line-height:1.6}
-.detail{display:grid;grid-template-columns:1fr 1fr;gap:32px;background:white;padding:28px;border-radius:18px}
-.detail .photo{height:380px;border-radius:12px}.detail h1{font-size:32px}
-footer{text-align:center;padding:30px;color:var(--muted)}
-@media(max-width:650px){.detail{grid-template-columns:1fr}.hero{padding:32px 22px}nav{padding:16px 5%}}
+:root {
+    --navy: #101828;
+    --ink: #172033;
+    --muted: #667085;
+    --brand: #5546e8;
+    --line: #eaecf0;
+    --bg: #f7f8fa;
+    --white: #fff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.announcement {
+    background: var(--navy);
+    color: white;
+    text-align: center;
+    padding: 10px 15px;
+    font-size: 12px;
+    letter-spacing: .4px;
+}
+
+.site-header {
+    background: white;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    z-index: 5;
+}
+
+.nav-container {
+    max-width: 1320px;
+    margin: auto;
+    min-height: 82px;
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: 850;
+    letter-spacing: -1.2px;
+    color: var(--navy);
+    white-space: nowrap;
+}
+
+.logo span { color: var(--brand); }
+
+.search-box {
+    flex: 1;
+    max-width: 530px;
+    position: relative;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 14px 18px 14px 44px;
+    border: 1px solid #d0d5dd;
+    background: #f9fafb;
+    border-radius: 30px;
+    outline: none;
+    font-size: 14px;
+}
+
+.search-box input:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px #5546e81a;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    top: 12px;
+    color: var(--muted);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 19px;
+    font-size: 13px;
+    font-weight: 650;
+    white-space: nowrap;
+}
+
+.nav-links a:hover { color: var(--brand); }
+
+.nav-links form { display: inline; }
+
+.nav-links button {
+    background: none;
+    border: 0;
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+}
+
+.cart-link {
+    background: #f0efff;
+    color: var(--brand) !important;
+    padding: 11px 15px;
+    border-radius: 24px;
+}
+
+.wrap {
+    max-width: 1320px;
+    margin: auto;
+    padding: 32px 25px;
+}
+
+.hero {
+    min-height: 355px;
+    background: linear-gradient(115deg, #101828, #29235f 65%, #5546e8);
+    border-radius: 22px;
+    padding: 65px 60px;
+    color: white;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 42px;
+}
+
+.hero-content { max-width: 610px; position: relative; z-index: 1; }
+
+.hero-tag {
+    color: #d5d0ff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    font-size: clamp(38px, 5vw, 60px);
+    letter-spacing: -2px;
+    line-height: 1.08;
+    margin: 18px 0;
+}
+
+.hero p {
+    color: #d8d9e8;
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 490px;
+}
+
+.hero-button {
+    display: inline-block;
+    background: white;
+    color: #27215e;
+    padding: 14px 23px;
+    border-radius: 30px;
+    margin-top: 15px;
+    font-weight: 750;
+    font-size: 14px;
+}
+
+.hero-button:hover { background: #eae8ff; }
+
+.hero-decoration {
+    position: absolute;
+    right: 9%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 150px;
+    opacity: .16;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 15px;
+    margin-bottom: 19px;
+}
+
+.section-heading h2 {
+    font-size: 25px;
+    letter-spacing: -.7px;
+    margin: 0;
+}
+
+.section-heading p {
+    margin: 7px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 3px 0 25px;
+}
+
+.pill {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 11px 18px;
+    border-radius: 30px;
+    font-size: 13px;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.pill:hover, .pill.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: white;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 17px;
+    overflow: hidden;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px #10182812;
+}
+
+.photo {
+    height: 235px;
+    background: #f8f9fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 18px;
+    overflow: hidden;
+}
+
+.photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform .3s;
+}
+
+.card:hover .photo img { transform: scale(1.05); }
+
+.placeholder { font-size: 65px; }
+
+.info { padding: 19px; }
+
+.category {
+    color: var(--brand);
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 750;
+    letter-spacing: .8px;
+}
+
+.info h3 {
+    font-size: 16px;
+    margin: 10px 0;
+    line-height: 1.4;
+}
+
+.price {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 13px 0;
+    letter-spacing: -.5px;
+}
+
+.stock {
+    color: #15803d;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.out-stock { color: #c2410c; }
+
+.btn {
+    display: inline-block;
+    background: var(--brand);
+    color: white;
+    border: 0;
+    padding: 12px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.btn:hover { background: #4032c7; }
+
+.product-button { width: 100%; }
+
+.muted { color: var(--muted); line-height: 1.6; }
+
+.detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 35px;
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+}
+
+.detail .photo { height: 420px; border-radius: 14px; }
+.detail h1 { font-size: 34px; }
+
+footer {
+    background: white;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    padding: 32px 15px;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 35px;
+}
+
+.no-results {
+    display: none;
+    padding: 35px;
+    text-align: center;
+    color: var(--muted);
+    background: white;
+    border-radius: 15px;
+}
+
+@media(max-width: 1000px) {
+    .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .nav-container { flex-wrap: wrap; }
+    .search-box { order: 3; max-width: none; flex-basis: 100%; }
+}
+
+@media(max-width: 700px) {
+    .nav-container { padding: 15px; gap: 13px; }
+    .logo { font-size: 23px; }
+    .nav-links { gap: 12px; font-size: 12px; }
+    .nav-links .optional-link { display: none; }
+    .wrap { padding: 22px 15px; }
+    .hero { padding: 40px 25px; min-height: 300px; }
+    .hero h1 { font-size: 39px; }
+    .hero-decoration { right: 2%; font-size: 100px; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .photo { height: 170px; }
+    .info { padding: 13px; }
+    .info h3 { font-size: 14px; }
+    .price { font-size: 19px; }
+    .detail { grid-template-columns: 1fr; padding: 18px; }
+    .detail .photo { height: 280px; }
+}
+
+@media(max-width: 380px) {
+    .grid { grid-template-columns: 1fr; }
+}
 </style>
+
+{% block extra_head %}{% endblock %}
 </head>
+
 <body>
-<div class="top"><span>TechStore — Your everyday electronics destination</span><span>Support • Quality • Value</span></div>
-<nav><a class="logo" href="/">TechStore<span style="color:#172033">.</span></a><div><a href="/">Shop</a> &nbsp; | &nbsp; <a href="/cart/">Cart ({{ request.session.cart|length|default:0 }})</a> &nbsp; | &nbsp; <a href="/admin/">Admin</a></div></nav>
-<main class="wrap">{% block content %}{% endblock %}</main>
-<footer>© TechStore · Electronics made simple</footer>
-</body></html>
+
+<div class="announcement">
+    Welcome to TechStore &nbsp; | &nbsp; Discover technology. Shop smarter.
+</div>
+
+<header class="site-header">
+<div class="nav-container">
+
+    <a class="logo" href="/">TechStore<span>.</span></a>
+
+    <div class="search-box">
+        <span class="search-icon">⌕</span>
+        <input id="productSearch" type="search"
+               placeholder="Search smartphones, electronics..."
+               aria-label="Search products">
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Shop</a>
+        <a class="cart-link" href="/cart/">Cart ({{ request.session.cart|length|default:0 }})</a>
+
+        {% if request.user.is_authenticated %}
+            <a class="optional-link" href="{% url 'customer_profile' %}">My Account</a>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a class="optional-link" href="{% url 'login' %}">Login</a>
+            <a class="optional-link" href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+
+</div>
+</header>
+
+<main class="wrap">
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <strong>TechStore.</strong><br><br>
+    Technology made simple. Shop with confidence.<br><br>
+    © TechStore. All rights reserved.
+</footer>
+
+<script>
+(function () {
+    const search = document.getElementById("productSearch");
+    if (!search) return;
+
+    search.addEventListener("input", function () {
+        const query = this.value.trim().toLowerCase();
+        const cards = document.querySelectorAll(".product-card");
+        let visible = 0;
+
+        cards.forEach(function (card) {
+            const matches = card.dataset.search.includes(query);
+            card.style.display = matches ? "" : "none";
+            if (matches) visible++;
+        });
+
+        const empty = document.getElementById("searchEmpty");
+        if (empty) {
+            empty.style.display = cards.length && visible === 0 ? "block" : "none";
+        }
+    });
+})();
+</script>
+
+</body>
+</html>

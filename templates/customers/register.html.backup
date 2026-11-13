@@ -1,0 +1,14 @@
+{% extends "products/base.html" %}
+{% block title %}Create Account | TechStore{% endblock %}
+{% block content %}
+<div style="max-width:500px;margin:30px auto;background:white;padding:30px;border-radius:16px">
+    <h1>Create your account</h1>
+    <p class="muted">Register to shop with TechStore.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn" type="submit">Create account</button>
+    </form>
+    <p>Already registered? <a href="{% url 'login' %}">Login here</a></p>
+</div>
+{% endblock %}

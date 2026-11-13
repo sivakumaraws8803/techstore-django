@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-g98!1w@el%2n8shqs*@v_o02)(naz=90ezm)4nvs!hp*@rvzz6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.126.87.128', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['43.204.130.221', '13.126.87.128', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -120,7 +120,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -141,3 +141,8 @@ DATABASES["shared_products"] = {
 }
 
 DATABASE_ROUTERS = ["config.db_router.SharedProductRouter"]
+
+# Customer authentication redirects
+LOGIN_URL = "/customers/login/"
+LOGIN_REDIRECT_URL = "/customers/profile/"
+LOGOUT_REDIRECT_URL = "/"

@@ -1,0 +1,11 @@
+{% extends "products/base.html" %}
+{% block title %}My Account | TechStore{% endblock %}
+{% block content %}
+<div style="max-width:650px;margin:30px auto;background:white;padding:30px;border-radius:16px">
+    <h1>My account</h1>
+    <p><strong>Username:</strong> {{ request.user.username }}</p>
+    <p><strong>Email:</strong> {{ request.user.email }}</p>
+    <p><strong>Account created:</strong> {{ request.user.date_joined|date:"d M Y" }}</p>
+    <a class="btn" href="/">Continue shopping</a>
+</div>
+{% endblock %}

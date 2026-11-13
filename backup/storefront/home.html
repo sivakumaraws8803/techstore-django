@@ -1,0 +1,17 @@
+{% extends "products/base.html" %}
+{% block content %}
+<section class="hero"><h1>Upgrade your everyday.</h1><p>Discover laptops, mobile phones, smart gadgets, speakers and cameras. Explore our collection and find the right technology for you.</p><a class="btn" href="#products">Explore products</a></section>
+<h2>Shop by category</h2>
+<div class="filters"><a class="pill {% if not selected_category %}active{% endif %}" href="/">All products</a>
+{% for category in categories %}<a class="pill {% if selected_category == category.slug %}active{% endif %}" href="/?category={{ category.slug|urlencode }}">{{ category.name }}</a>{% endfor %}
+</div>
+<h2 id="products">Featured products</h2>
+<div class="grid">
+{% for product in products %}
+<article class="card"><a href="{% url 'product_detail' product.slug %}"><div class="photo">{% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<span class="placeholder">📦</span>{% endif %}</div></a>
+<div class="info"><div class="category">{{ product.category.name }}</div><h3><a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a></h3><div class="price">₹{{ product.price }}</div><p class="muted">{% if product.stock %}In stock: {{ product.stock }}{% else %}Currently unavailable{% endif %}</p>
+{% if product.stock %}<form method="post" action="{% url 'add_to_cart' product.id %}">{% csrf_token %}<button class="btn">Add to cart</button></form>{% endif %}
+</div></article>
+{% empty %}<p>No products have been added yet. Visit <a href="/admin/"><strong>Django Admin</strong></a> to add your first product and upload its image.</p>{% endfor %}
+</div>
+{% endblock %}

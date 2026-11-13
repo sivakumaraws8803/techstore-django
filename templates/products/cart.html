@@ -1,18 +1,31 @@
 {% extends "products/base.html" %}
-{% block title %}Your Cart | TechStore{% endblock %}
+{% block title %}Shopping Cart | TechStore{% endblock %}
+
 {% block content %}
 <h1>Your shopping cart</h1>
+
 {% if items %}
-{% for item in items %}
-<div class="card" style="padding:18px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
-<div><strong>{{ item.product.name }}</strong><p class="muted">Quantity: {{ item.quantity }} · ₹{{ item.product.price }} each</p></div>
-<div><strong>₹{{ item.line_total }}</strong><form method="post" action="{% url 'remove_from_cart' item.product.id %}" style="margin-top:10px">{% csrf_token %}<button class="btn">Remove</button></form></div>
-</div>
-{% endfor %}
-<h2>Total: ₹{{ total }}</h2>
-<p class="muted">This is a demo cart. Checkout and payment processing are not configured yet.</p>
-<a class="btn" href="/">Continue shopping</a>
+    {% for item in items %}
+    <article class="card" style="padding:18px;margin-bottom:15px">
+        <div class="info">
+            <h3>{{ item.product.name }}</h3>
+            <p class="muted">Quantity: {{ item.quantity }}</p>
+            <p>Price: ₹{{ item.product.price }}</p>
+            <strong>Subtotal: ₹{{ item.line_total }}</strong>
+
+            <form method="post" action="{% url 'remove_from_cart' item.product.id %}">
+                {% csrf_token %}
+                <button class="btn" type="submit">Remove</button>
+            </form>
+        </div>
+    </article>
+    {% endfor %}
+
+    <h2>Total: ₹{{ total }}</h2>
+    <p class="muted">Checkout will be added in the next stage.</p>
+    <a class="btn" href="/">Continue shopping</a>
 {% else %}
-<p>Your cart is empty.</p><a class="btn" href="/">Browse products</a>
+    <p>Your cart is empty.</p>
+    <a class="btn" href="/">Start shopping</a>
 {% endif %}
 {% endblock %}
